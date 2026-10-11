@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
 });
 
 const isAuthRequest = (url = '') =>
@@ -66,7 +68,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshResponse = await axios.post('/api/auth/refresh', { refreshToken });
+        const refreshResponse = await axios.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
         const nextAccessToken = refreshResponse.data?.data?.accessToken;
 
         if (!nextAccessToken) {
